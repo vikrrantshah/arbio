@@ -15,7 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@arbio/db": ["libs/db/src/index.ts"]
+      "@arbio/db": ["libs/server/db/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

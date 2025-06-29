@@ -1,7 +1,7 @@
 {
   "name": "db",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/db/src",
+  "sourceRoot": "libs/server/db/src",
   "projectType": "library",
   "tags": [],
   "// targets": "to see all targets run: nx show project db --web",
@@ -9,32 +9,32 @@
     "prisma": {
       "command": "prisma",
       "options": {
-        "cwd": "libs/db"
+        "cwd": "libs/server/db"
       }
     },
     "generate-types": {
       "command": "prisma generate",
       "options": {
-        "cwd": "libs/db"
+        "cwd": "libs/server/db"
       }
     },
     "migrate": {
       "command": "prisma migrate dev",
       "options": {
-        "cwd": "libs/db"
+        "cwd": "libs/server/db"
       }
     },
     "deploy": {
       "command": "prisma migrate dev",
       "options": {
-        "cwd": "libs/db"
+        "cwd": "libs/server/db"
       }
     },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/db/**/*.ts"]
+        "lintFilePatterns": ["libs/server/db/**/*.ts"]
       }
     }
   }
