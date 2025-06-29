@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@arbio/authenticator": ["libs/server/authenticator/src/index.ts"],
       "@arbio/db": ["libs/server/db/src/index.ts"]
     }
   },
