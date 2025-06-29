@@ -1,0 +1,28 @@
+generator client {
+  provider = "prisma-client-js"
+  // If you want to have multiple Prisma Datasources
+  // output   = "<path-to-node_modules>/node_modules/@prisma/client/<some-custom-name>"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
+  salt     String
+  name     String
+  todo     ToDo[]
+}
+
+model ToDo {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String
+  completed Boolean? @default(false)
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+}
