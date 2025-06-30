@@ -16,7 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@arbio/authenticator": ["libs/server/authenticator/src/index.ts"],
-      "@arbio/db": ["libs/server/db/src/index.ts"]
+      "@arbio/db": ["libs/server/db/src/index.ts"],
+      "@arbio/ui": ["libs/shared/ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

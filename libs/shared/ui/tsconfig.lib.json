@@ -1,10 +1,9 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../dist/out-tsc",
+    "outDir": "../../../dist/out-tsc",
     "types": ["node"]
   },
-  "files": ["../../node_modules/@nx/expo/typings/svg.d.ts"],
   "exclude": [
     "**/*.test.ts",
     "**/*.spec.ts",
@@ -14,13 +13,8 @@
     "**/*.spec.js",
     "**/*.test.jsx",
     "**/*.spec.jsx",
-    "src/test-setup.ts"
+    "src/test-setup.ts",
+    "../../nativewind-env.d.ts"
   ],
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.js",
-    "**/*.jsx",
-    "nativewind-env.d.ts"
-  ]
+  "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"]
 }
