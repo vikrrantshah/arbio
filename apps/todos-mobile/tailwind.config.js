@@ -4,7 +4,7 @@ module.exports = {
     './src/**/*.{js,jsx,ts,tsx}',
     '../../libs/shared/ui/**/*.{js,jsx,ts,tsx}',
   ],
-  presets: [require('nativewind/preset')],
+  presets: [require('../../tailwind.preset')],
   theme: {
     extend: {},
   },
