@@ -29,6 +29,7 @@
     },
     "plugins": [],
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true
+    "newArchEnabled": true,
+    "scheme": "arbio-todos"
   }
 }
