@@ -7,7 +7,6 @@ import { DBService } from '@arbio/db';
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly db: DBService) {
-    console.log(process.env);
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -22,7 +21,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
     if (!user)
       throw new UnauthorizedException(
-        'Invalid User, Auth token authorization failed.'
+        'Invalid User, Auth token authorization failed.',
       );
+
+    return user;
   }
 }

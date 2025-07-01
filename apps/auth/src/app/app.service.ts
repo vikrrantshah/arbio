@@ -8,20 +8,21 @@ import * as bcrypt from 'bcrypt';
 export class AppService {
   constructor(
     private readonly db: DBService,
-    private readonly jwtService: JwtService
+    private readonly jwtService: JwtService,
   ) {}
 
   async verifyUser(
     email: string,
-    password: string
+    password: string,
   ): Promise<Omit<User, 'password'>> {
-    const { password: userPassword, ...user } = await this.db.user.findUnique({
+    const dbUser = await this.db.user.findUnique({
       where: { email },
     });
 
-    if (!user)
+    if (!dbUser)
       throw new UnauthorizedException('Invalid user email or password');
 
+    const { password: userPassword, ...user } = dbUser;
     const isValid = await bcrypt.compare(password, userPassword);
 
     if (!isValid)
@@ -34,5 +35,12 @@ export class AppService {
     return {
       access_token: this.jwtService.sign(user),
     };
+  }
+
+  async registerUser(user: Omit<User, 'id'>) {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(user.password, salt);
+
+    return this.db.user.create({ data: { ...user, password: hashedPassword } });
   }
 }

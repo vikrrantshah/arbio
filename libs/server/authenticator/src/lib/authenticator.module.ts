@@ -1,7 +1,8 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { DBModule } from '@arbio/db';
 import { JwtStrategy } from './strategy/jwt.strategy';
 
+@Global()
 @Module({
   imports: [DBModule],
   controllers: [],
