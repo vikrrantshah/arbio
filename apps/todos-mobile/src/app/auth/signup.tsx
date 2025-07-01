@@ -66,6 +66,7 @@ const SignUp = () => {
             </View>
           </View>
         </View>
+        <View className="absolute bottom-0 inset-x-0 bg-neutral-100 h-10" />
       </SafeAreaView>
     </>
   );
