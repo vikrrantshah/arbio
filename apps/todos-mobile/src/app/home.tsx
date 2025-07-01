@@ -1,6 +1,9 @@
-import { SafeAreaView, StatusBar, Text, View } from 'react-native';
+import { FlatList, SafeAreaView, StatusBar, Text, View } from 'react-native';
 import { SvgUri } from 'react-native-svg';
 import { ToDo } from '@prisma/client';
+import { TodoItem } from '../components/todo-item';
+import { TodoEditModal } from '../components/todo-edit-modal';
+import { useState } from 'react';
 
 const todos: ToDo[] = [
   {
@@ -14,7 +17,7 @@ const todos: ToDo[] = [
     id: 2,
     title: 'Lorem Ipsum',
     content: 'hello for the other side.',
-    completed: false,
+    completed: true,
     userId: 0,
   },
   {
@@ -28,12 +31,14 @@ const todos: ToDo[] = [
     id: 4,
     title: 'Lorem Ipsum',
     content: 'hello for the other side.',
-    completed: false,
+    completed: true,
     userId: 0,
   },
 ];
 
 const Home = () => {
+  const [todoToEdit, setTodoToEdit] = useState<ToDo | null>(null);
+
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -48,7 +53,22 @@ const Home = () => {
           />
           <Text className="text-4xl">+</Text>
         </View>
-        <View className="flex-1 p-4 bg-neutral-100"></View>
+        <View className="flex-1 p-4 bg-neutral-100 gap-4">
+          <Text className="text-3xl font-semibold">Your ToDos</Text>
+          <FlatList
+            data={todos}
+            keyExtractor={(todo) => `${todo.id}`}
+            renderItem={({ item: todo }) => (
+              <TodoItem
+                todo={todo}
+                key={todo.id}
+                onEditTodoPress={setTodoToEdit}
+              />
+            )}
+            contentContainerClassName="gap-2"
+          />
+        </View>
+        <TodoEditModal todo={todoToEdit} onClose={() => setTodoToEdit(null)} />
         <View className="absolute bottom-0 inset-x-0 bg-neutral-100 h-10" />
       </SafeAreaView>
     </>

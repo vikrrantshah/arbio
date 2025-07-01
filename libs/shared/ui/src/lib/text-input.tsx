@@ -18,7 +18,7 @@ export const TextInput: FC<TextInputProps> = ({
   return (
     <View
       className={cn(
-        'px-4 py-4 bg-white border border-2 rounded-md',
+        'px-4 pt-3 pb-5 bg-white border border-2 rounded-md',
         wrapperClassName,
       )}
     >
