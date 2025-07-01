@@ -24,9 +24,9 @@ export const App = () => {
           <Text className="text-3xl">Find Your Arbio Home</Text>
         </View>
         <View className="p-4 gap-2">
-          <Button onPress={() => router.replace('/login')} title="Login" />
+          <Button onPress={() => router.replace('/auth/login')} title="Login" />
           <Button
-            onPress={() => router.replace('/signup')}
+            onPress={() => router.replace('/auth/signup')}
             title="Sign Up"
             alt
           />
