@@ -4,6 +4,7 @@ import { ToDo } from '@prisma/client';
 import { TodoItem } from '../components/todo-item';
 import { TodoEditModal } from '../components/todo-edit-modal';
 import { useState } from 'react';
+import { TodoCreateModal } from '../components/todo-create-modal';
 
 const todos: ToDo[] = [
   {
@@ -37,6 +38,7 @@ const todos: ToDo[] = [
 ];
 
 const Home = () => {
+  const [createModal, setCreateModal] = useState<boolean>(false);
   const [todoToEdit, setTodoToEdit] = useState<ToDo | null>(null);
 
   return (
@@ -51,7 +53,9 @@ const Home = () => {
             width={120}
             height={30}
           />
-          <Text className="text-4xl">+</Text>
+          <Text className="text-4xl" onPress={() => setCreateModal(true)}>
+            +
+          </Text>
         </View>
         <View className="flex-1 p-4 bg-neutral-100 gap-4">
           <Text className="text-3xl font-semibold">Your ToDos</Text>
@@ -68,6 +72,10 @@ const Home = () => {
             contentContainerClassName="gap-2"
           />
         </View>
+        <TodoCreateModal
+          visible={createModal}
+          onClose={() => setCreateModal(false)}
+        />
         <TodoEditModal todo={todoToEdit} onClose={() => setTodoToEdit(null)} />
         <View className="absolute bottom-0 inset-x-0 bg-neutral-100 h-10" />
       </SafeAreaView>
