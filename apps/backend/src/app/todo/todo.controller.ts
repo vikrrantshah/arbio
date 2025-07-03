@@ -13,6 +13,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ToDo } from '@prisma/client';
+import { ZodError } from 'zod';
+import { CreateTodoSchema, UpdateTodoSchema } from '@arbio/schema';
 
 @UseGuards(JwtAuthGuard)
 @Controller('todo')
@@ -37,15 +39,20 @@ export class TodoController {
 
   @Post('/')
   createTodo(@Body() body: Omit<ToDo, 'id' | 'completed'>) {
-    const { userId, ...todo } = body;
+    try {
+      CreateTodoSchema.parse(body);
+      const { userId, ...todo } = body;
 
-    return this.db.toDo.create({
-      data: {
-        ...todo,
-        completed: false,
-        user: { connect: { id: userId } },
-      },
-    });
+      return this.db.toDo.create({
+        data: {
+          ...todo,
+          completed: false,
+          user: { connect: { id: userId } },
+        },
+      });
+    } catch (error) {
+      if (error instanceof ZodError) throw new BadRequestException(error);
+    }
   }
 
   @Patch('/:id')
@@ -57,6 +64,7 @@ export class TodoController {
     if (isNaN(id)) throw new BadRequestException('Invalid id');
 
     try {
+      UpdateTodoSchema.parse(body);
       const updatedTodo = await this.db.toDo.update({
         where: { id },
         data: body,
@@ -67,6 +75,8 @@ export class TodoController {
       if (error.code === 'P2025') {
         throw new NotFoundException(`No todo with id ${id} was found`);
       }
+
+      if (error instanceof ZodError) throw new BadRequestException(error);
 
       throw error;
     }
