@@ -5,28 +5,40 @@ import axios from 'axios';
 type AuthStore = {
   isAuthenticated: boolean;
   isLoading: boolean;
-  token: string | null;
+  access_token: string | null;
   user: Omit<User, 'password'> | null;
   error: any;
   login: (credentials: { email: string; password: string }) => void;
-  register: (credentials: {}) => void;
+  register: (credentials: {
+    email: string;
+    password: string;
+    confirmPassword: string;
+  }) => void;
   logout: () => void;
 };
 
 export const useAuthStore = create<AuthStore>((set) => ({
   isAuthenticated: false,
   isLoading: false,
-  token: null,
+  access_token: null,
   user: null,
   error: null,
   login: (credentials) => {
     set({ isLoading: true });
     axios
-      .post<{ token: string }>('http://localhost:4001/auth/login', credentials)
-      .then(({ data: { token } }) => {
-        const user = parseJWT(token);
-        console.log(user);
-        set({ token, isAuthenticated: true, isLoading: false, user });
+      .post<{ access_token: string }>(
+        'http://localhost:4001/auth/login',
+        credentials,
+      )
+      .then(({ data: { access_token } }) => {
+        const user = parseJWT(access_token);
+        set({
+          access_token,
+          isAuthenticated: true,
+          isLoading: false,
+          user,
+          error: null,
+        });
       })
       .catch((error) => {
         JSON.stringify(error, null, 2);
@@ -36,23 +48,30 @@ export const useAuthStore = create<AuthStore>((set) => ({
   register: (credentials) => {
     set({ isLoading: false });
     axios
-      .post<{ token: string }>(
+      .post<{ access_token: string }>(
         'http://localhost:4001/auth/register',
         credentials,
       )
-      .then(({ data: { token } }) => {
-        const user = parseJWT(token);
+      .then(({ data: { access_token } }) => {
+        const user = parseJWT(access_token);
         console.log(user);
-        set({ token, isAuthenticated: true, isLoading: false, user });
+        set({
+          access_token,
+          isAuthenticated: true,
+          isLoading: false,
+          user,
+          error: null,
+        });
       })
       .catch((error) => {
         set({ isLoading: false, error });
       });
   },
-  logout: () => set({ token: null, isAuthenticated: false }),
+  logout: () => set({ access_token: null, isAuthenticated: false }),
 }));
 
 const parseJWT = (token: string): Omit<User, 'password'> => {
+  console.log('TOken', token);
   const base64Url = token.split('.')[1];
   const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
   const jsonPayload = decodeURIComponent(

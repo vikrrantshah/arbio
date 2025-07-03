@@ -1,6 +1,6 @@
 import { Button, Label, Link, TextInput } from '@arbio/ui';
 import { useRouter } from 'expo-router';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SafeAreaView, StatusBar, Text, View } from 'react-native';
 import { SvgUri } from 'react-native-svg';
 import { useForm } from 'react-hook-form';
@@ -14,12 +14,15 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 export const Login = () => {
   const router = useRouter();
-  const { isLoading, error, login } = useAuthStore();
+  const { isLoading, isAuthenticated, error, login } = useAuthStore();
   const { control, handleSubmit } = useForm<LoginForm>({
     resolver: zodResolver(LoginFormSchema),
     defaultValues: LoginFormDefaultValues,
   });
-  console.log(error);
+
+  useEffect(() => {
+    if (isAuthenticated) router.replace('/home');
+  }, [isAuthenticated]);
 
   return (
     <>
@@ -65,6 +68,9 @@ export const Login = () => {
                 editable={!isLoading}
               />
             </View>
+            <Text className="text-red-500">
+              {error && 'Something went wrong please try again later.'}
+            </Text>
           </View>
           <View className="items-center gap-4">
             <Button

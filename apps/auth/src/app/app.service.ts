@@ -44,6 +44,8 @@ export class AppService {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(user.password, salt);
 
-    return this.db.user.create({ data: { ...user, password: hashedPassword } });
+    return this.db.user.create({
+      data: { email: user.email, password: hashedPassword },
+    });
   }
 }

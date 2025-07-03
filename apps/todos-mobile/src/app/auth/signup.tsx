@@ -9,17 +9,22 @@ import { useForm } from 'react-hook-form';
 import { SafeAreaView, StatusBar, Text, View } from 'react-native';
 import { SvgUri } from 'react-native-svg';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useAuthStore } from '@arbio/store';
+import { useEffect } from 'react';
 
 const SignUp = () => {
   const router = useRouter();
+  const { isLoading, isAuthenticated, error, register } = useAuthStore();
   const { control, handleSubmit } = useForm<SignUpForm>({
     resolver: zodResolver(SignUpFormSchema),
     defaultValues: SignUpFormDefaultValues,
   });
 
-  const onSubmit = (data: SignUpForm) => {
-    console.log('SignUpForm', data);
-  };
+  console.log(error);
+
+  useEffect(() => {
+    if (isAuthenticated) router.replace('/home');
+  }, [isAuthenticated]);
 
   return (
     <>
@@ -49,6 +54,7 @@ const SignUp = () => {
                 autoComplete="email"
                 control={control}
                 name="email"
+                editable={!isLoading}
               />
             </View>
             <View className="py-2 gap-1">
@@ -60,6 +66,7 @@ const SignUp = () => {
                 autoComplete="password"
                 control={control}
                 name="password"
+                editable={!isLoading}
               />
             </View>
             <Text className="text-sm text-gray-600">
@@ -76,20 +83,26 @@ const SignUp = () => {
                 autoComplete="password"
                 control={control}
                 name="confirmPassword"
+                editable={!isLoading}
               />
             </View>
+            <Text className="text-red-500">
+              {error && 'Something went wrong please try again later.'}
+            </Text>
           </View>
           <View className="items-center gap-4">
             <Button
               title="Create account"
-              onPress={handleSubmit(onSubmit)}
+              onPress={handleSubmit(register)}
               className="w-full"
+              disabled={isLoading}
             />
             <View className="flex-row">
               <Text>Already have an account? </Text>
               <Link
                 title="Log in"
-                onPress={() => router.replace('/auth/login')}
+                onPress={() => router.replace('/auth/loginkr')}
+                disabled={isLoading}
               />
             </View>
           </View>

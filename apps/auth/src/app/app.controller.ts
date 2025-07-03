@@ -34,6 +34,7 @@ export class AppController {
         await this.appService.registerUser(body);
       return this.appService.login(createdUser);
     } catch (error) {
+      console.log(error);
       throw new BadRequestException(error);
     }
   }
