@@ -13,14 +13,17 @@ export const Button: FC<ButtonProps> = ({
   title,
   titleClassName,
   alt = false,
+  disabled,
   ...props
 }) => {
   return (
     <TouchableOpacity
+      disabled={disabled}
       {...props}
       className={cn(
         'px-4 py-4 bg-primary justify-center items-center border border-2 rounded-md',
         { 'bg-white': alt },
+        { 'bg-gray-200': disabled },
         className,
       )}
     >

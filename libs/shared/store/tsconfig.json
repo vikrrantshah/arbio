@@ -17,5 +17,8 @@
     {
       "path": "./tsconfig.lib.json"
     }
-  ]
+  ],
+  "paths": {
+    "@arbio/schema": ["../../schema/src/index.ts"]
+  }
 }

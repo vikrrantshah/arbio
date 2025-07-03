@@ -9,18 +9,17 @@ import {
   LoginFormDefaultValues,
   LoginFormSchema,
 } from '@arbio/schema';
+import { useAuthStore } from '@arbio/store';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 export const Login = () => {
   const router = useRouter();
+  const { isLoading, error, login } = useAuthStore();
   const { control, handleSubmit } = useForm<LoginForm>({
     resolver: zodResolver(LoginFormSchema),
     defaultValues: LoginFormDefaultValues,
   });
-
-  const onSubmit = (data: LoginForm) => {
-    console.log('LoginForm', data);
-  };
+  console.log(error);
 
   return (
     <>
@@ -51,6 +50,7 @@ export const Login = () => {
                 autoCapitalize="none"
                 autoComplete="email"
                 control={control}
+                editable={!isLoading}
               />
             </View>
             <View className="gap-1">
@@ -62,18 +62,21 @@ export const Login = () => {
                 autoComplete="password"
                 name="password"
                 control={control}
+                editable={!isLoading}
               />
             </View>
           </View>
           <View className="items-center gap-4">
             <Button
               title="Login"
-              onPress={handleSubmit(onSubmit)}
+              onPress={handleSubmit(login)}
               className="w-full"
+              disabled={isLoading}
             />
             <View className="flex-row">
               <Text>Don't have an accout? </Text>
               <Link
+                disabled={isLoading}
                 title="Sign up"
                 onPress={() => router.replace('/auth/signup')}
               />

@@ -25,8 +25,6 @@ export function TextInput<T extends FieldValues = FieldValues>({
     formState: { errors },
   } = useController({ control, name });
 
-  console.log(errors);
-
   return (
     <>
       <View
