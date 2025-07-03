@@ -1,11 +1,26 @@
-import { Button, Label, Link, LinkAlt, TextInput } from '@arbio/ui';
+import { Button, Label, Link, TextInput } from '@arbio/ui';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { SafeAreaView, StatusBar, Text, View } from 'react-native';
 import { SvgUri } from 'react-native-svg';
+import { useForm } from 'react-hook-form';
+import {
+  LoginForm,
+  LoginFormDefaultValues,
+  LoginFormSchema,
+} from '@arbio/schema';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 export const Login = () => {
   const router = useRouter();
+  const { control, handleSubmit } = useForm<LoginForm>({
+    resolver: zodResolver(LoginFormSchema),
+    defaultValues: LoginFormDefaultValues,
+  });
+
+  const onSubmit = (data: LoginForm) => {
+    console.log('LoginForm', data);
+  };
 
   return (
     <>
@@ -23,30 +38,42 @@ export const Login = () => {
         <View className="flex-1 p-4 bg-neutral-100">
           <View className="flex-1 justify-center gap-2">
             <Text className="text-4xl font-semibold">Welcome Back!</Text>
-            <Text className="text-gray-600">
+            <Text className="text-gray-600 pb-2">
               Log in to your Arbio account to access your reservations, stay
               connected with the latest updates and receive additional discounts
               on future bookings!
             </Text>
-            <View className="py-2 gap-1">
+            <View className="gap-1">
               <Label>Email</Label>
-              <TextInput placeholder="Email" />
+              <TextInput<LoginForm>
+                placeholder="Email"
+                name="email"
+                autoCapitalize="none"
+                autoComplete="email"
+                control={control}
+              />
             </View>
-            <View className="py-2 gap-1">
+            <View className="gap-1">
               <Label>Password</Label>
-              <TextInput placeholder="Password" secureTextEntry />
+              <TextInput<LoginForm>
+                placeholder="Password"
+                secureTextEntry
+                autoCapitalize="none"
+                autoComplete="password"
+                name="password"
+                control={control}
+              />
             </View>
           </View>
           <View className="items-center gap-4">
             <Button
               title="Login"
-              onPress={() => router.replace('/home')}
+              onPress={handleSubmit(onSubmit)}
               className="w-full"
             />
             <View className="flex-row">
               <Text>Don't have an accout? </Text>
-              {/* <Link title="Sign up" href="/auth/signup" /> */}
-              <LinkAlt
+              <Link
                 title="Sign up"
                 onPress={() => router.replace('/auth/signup')}
               />

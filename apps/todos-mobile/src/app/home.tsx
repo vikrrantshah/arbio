@@ -1,10 +1,10 @@
 import { FlatList, SafeAreaView, StatusBar, Text, View } from 'react-native';
 import { SvgUri } from 'react-native-svg';
 import { ToDo } from '@prisma/client';
-import { TodoItem } from '../components/todo-item';
-import { TodoEditModal } from '../components/todo-edit-modal';
+import { TodoItem } from '../../components/todo-item';
+import { TodoEditModal } from '../../components/todo-edit-modal';
 import { useState } from 'react';
-import { TodoCreateModal } from '../components/todo-create-modal';
+import { TodoCreateModal } from '../../components/todo-create-modal';
 
 const todos: ToDo[] = [
   {

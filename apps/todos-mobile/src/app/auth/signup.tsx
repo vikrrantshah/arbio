@@ -1,10 +1,25 @@
-import { Button, Label, LinkAlt, TextInput } from '@arbio/ui';
+import {
+  SignUpForm,
+  SignUpFormDefaultValues,
+  SignUpFormSchema,
+} from '@arbio/schema';
+import { Button, Label, Link, TextInput } from '@arbio/ui';
 import { useRouter } from 'expo-router';
+import { useForm } from 'react-hook-form';
 import { SafeAreaView, StatusBar, Text, View } from 'react-native';
 import { SvgUri } from 'react-native-svg';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 const SignUp = () => {
   const router = useRouter();
+  const { control, handleSubmit } = useForm<SignUpForm>({
+    resolver: zodResolver(SignUpFormSchema),
+    defaultValues: SignUpFormDefaultValues,
+  });
+
+  const onSubmit = (data: SignUpForm) => {
+    console.log('SignUpForm', data);
+  };
 
   return (
     <>
@@ -26,40 +41,53 @@ const SignUp = () => {
               Become an Arbio member for free and receive additional discounts
               on future bookings!
             </Text>
-            <View className="py-2 gap-1">
+            <View className="py-2">
               <Label>Email</Label>
-              <TextInput placeholder="Email" />
+              <TextInput
+                placeholder="Email"
+                autoCapitalize="none"
+                autoComplete="email"
+                control={control}
+                name="email"
+              />
             </View>
             <View className="py-2 gap-1">
               <Label>Password</Label>
-              <TextInput placeholder="Password" secureTextEntry />
+              <TextInput
+                placeholder="Password"
+                secureTextEntry
+                autoCapitalize="none"
+                autoComplete="password"
+                control={control}
+                name="password"
+              />
             </View>
-            <View className="gap-0.5">
-              <Text className="text-sm text-gray-600">
-                Password must be at least 8 characters
-              </Text>
-              <Text className="text-sm text-gray-600">
-                Password must contain a combination of uppercase & lowercase
-                letters
-              </Text>
-              <Text className="text-sm text-gray-600">
-                Password must contain at least one number
-              </Text>
-            </View>
+            <Text className="text-sm text-gray-600">
+              Password must be at least 8 characters, must contain a combination
+              of uppercase & lowercase letters and must contain at least one
+              number
+            </Text>
             <View className="py-2 gap-1">
               <Label>Confirm Password</Label>
-              <TextInput placeholder="Confirm Password" secureTextEntry />
+              <TextInput
+                placeholder="Confirm Password"
+                secureTextEntry
+                autoCapitalize="none"
+                autoComplete="password"
+                control={control}
+                name="confirmPassword"
+              />
             </View>
           </View>
           <View className="items-center gap-4">
             <Button
               title="Create account"
-              onPress={() => console.log('Login')}
+              onPress={handleSubmit(onSubmit)}
               className="w-full"
             />
             <View className="flex-row">
               <Text>Already have an account? </Text>
-              <LinkAlt
+              <Link
                 title="Log in"
                 onPress={() => router.replace('/auth/login')}
               />

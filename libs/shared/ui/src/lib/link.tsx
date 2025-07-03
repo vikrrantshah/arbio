@@ -1,15 +1,17 @@
-import { Link as ExpoLink, LinkProps as ExpoLinkProps } from 'expo-router';
 import { FC } from 'react';
+import { Text, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import { cn } from '../utils/cn';
 
-type LinkProps = ExpoLinkProps & {
+type LinkProps = TouchableOpacityProps & {
   title: string;
 };
 
 export const Link: FC<LinkProps> = ({ title, className, ...props }) => {
   return (
-    <ExpoLink {...props} className={cn('text-accent', className)}>
-      {title}
-    </ExpoLink>
+    <TouchableOpacity {...props}>
+      <Text className={cn('text-accent font-semibold', className)}>
+        {title}
+      </Text>
+    </TouchableOpacity>
   );
 };
