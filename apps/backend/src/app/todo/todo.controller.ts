@@ -21,9 +21,12 @@ import { CreateTodoSchema, UpdateTodoSchema } from '@arbio/schema';
 export class TodoController {
   constructor(private readonly db: DBService) {}
 
-  @Get('/')
-  getTodos() {
-    return this.db.toDo.findMany();
+  @Get('/user/:id')
+  getTodos(@Param() params: { id: string }) {
+    const id = parseInt(params.id);
+    if (isNaN(id)) throw new BadRequestException('Invalid id');
+
+    return this.db.toDo.findMany({ where: { userId: id } });
   }
 
   @Get('/:id')
