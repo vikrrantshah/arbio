@@ -11,10 +11,13 @@ export class AppService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async verifyUser(
-    email: string,
-    password: string,
-  ): Promise<Omit<User, 'password'>> {
+  async verifyUser({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }): Promise<Omit<User, 'password'>> {
     const dbUser = await this.db.user.findUnique({
       where: { email },
     });
