@@ -14,10 +14,16 @@ export const TodoItem: FC<TodoItemProps> = ({
 }) => {
   return (
     <TouchableOpacity
-      className="bg-white border-2 rounded-md p-4"
+      className={cn('bg-white border-2 rounded-md p-4', {
+        'border-gray-700': todo.completed,
+      })}
       onPress={() => onEditTodoPress(todo)}
     >
-      <Text className={cn('text-lg', { 'line-through': todo.completed })}>
+      <Text
+        className={cn('text-lg', {
+          'line-through text-gray-700': todo.completed,
+        })}
+      >
         {todo.title}
       </Text>
     </TouchableOpacity>

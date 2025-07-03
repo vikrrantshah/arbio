@@ -1,44 +1,51 @@
-import { FlatList, SafeAreaView, StatusBar, Text, View } from 'react-native';
+import {
+  FlatList,
+  SafeAreaView,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { SvgUri } from 'react-native-svg';
 import { ToDo } from '@prisma/client';
+import { useState } from 'react';
 import { TodoItem } from '../../components/todo-item';
 import { TodoEditModal } from '../../components/todo-edit-modal';
-import { useState } from 'react';
 import { TodoCreateModal } from '../../components/todo-create-modal';
 
 const todos: ToDo[] = [
   {
     id: 1,
-    title: 'Lorem Ipsum',
-    content: 'hello for the other side.',
+    title: '1 Lorem Ipsum',
+    content: '1 hello for the other side.',
     completed: false,
     userId: 0,
   },
   {
     id: 2,
-    title: 'Lorem Ipsum',
-    content: 'hello for the other side.',
+    title: '2 Lorem Ipsum',
+    content: '2 hello for the other side.',
     completed: true,
     userId: 0,
   },
   {
     id: 3,
-    title: 'Lorem Ipsum',
-    content: 'hello for the other side.',
+    title: '3 Lorem Ipsum',
+    content: '3 hello for the other side.',
     completed: false,
     userId: 0,
   },
   {
     id: 4,
-    title: 'Lorem Ipsum',
-    content: 'hello for the other side.',
+    title: '4 Lorem Ipsum',
+    content: '4 hello for the other side.',
     completed: true,
     userId: 0,
   },
 ];
 
 const Home = () => {
-  const [createModal, setCreateModal] = useState<boolean>(false);
+  const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
   const [todoToEdit, setTodoToEdit] = useState<ToDo | null>(null);
 
   return (
@@ -53,9 +60,9 @@ const Home = () => {
             width={120}
             height={30}
           />
-          <Text className="text-4xl" onPress={() => setCreateModal(true)}>
-            +
-          </Text>
+          <TouchableOpacity onPress={() => setCreateModalVisible(true)}>
+            <Text className="text-4xl">+</Text>
+          </TouchableOpacity>
         </View>
         <View className="flex-1 p-4 bg-neutral-100 gap-4">
           <Text className="text-3xl font-semibold">Your ToDos</Text>
@@ -72,11 +79,15 @@ const Home = () => {
             contentContainerClassName="gap-2"
           />
         </View>
-        <TodoCreateModal
-          visible={createModal}
-          onClose={() => setCreateModal(false)}
-        />
-        <TodoEditModal todo={todoToEdit} onClose={() => setTodoToEdit(null)} />
+        {createModalVisible && (
+          <TodoCreateModal onClose={() => setCreateModalVisible(false)} />
+        )}
+        {!!todoToEdit && (
+          <TodoEditModal
+            todo={todoToEdit}
+            onClose={() => setTodoToEdit(null)}
+          />
+        )}
         <View className="absolute bottom-0 inset-x-0 bg-neutral-100 h-10" />
       </SafeAreaView>
     </>

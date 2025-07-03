@@ -18,6 +18,7 @@
       "@arbio/authenticator": ["libs/server/authenticator/src/index.ts"],
       "@arbio/db": ["libs/server/db/src/index.ts"],
       "@arbio/schema": ["libs/shared/schema/src/index.ts"],
+      "@arbio/store": ["libs/shared/store/src/index.ts"],
       "@arbio/ui": ["libs/shared/ui/src/index.ts"]
     }
   },

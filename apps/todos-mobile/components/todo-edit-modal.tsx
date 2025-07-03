@@ -1,7 +1,10 @@
+import { UpdateTodoForm, UpdateTodoSchema } from '@arbio/schema';
 import { Button, Label, TextInput } from '@arbio/ui';
 import { ToDo } from '@prisma/client';
 import { FC } from 'react';
-import { Modal, Text, View } from 'react-native';
+import { Modal, Text, TouchableOpacity, View } from 'react-native';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 type TodoEditModalProps = {
   todo: ToDo | null;
@@ -9,6 +12,24 @@ type TodoEditModalProps = {
 };
 
 export const TodoEditModal: FC<TodoEditModalProps> = ({ todo, onClose }) => {
+  const { control, handleSubmit, setValue } = useForm<UpdateTodoForm>({
+    resolver: zodResolver(UpdateTodoSchema),
+    defaultValues: {
+      title: todo?.title || '',
+      content: todo?.content || '',
+      completed: todo?.completed || false,
+    },
+  });
+
+  const onSubmit = (data: UpdateTodoForm) => {
+    console.log(data);
+  };
+
+  const changeTodoStatus = (completed: boolean) => {
+    setValue('completed', completed);
+    handleSubmit(onSubmit)();
+  };
+
   return (
     <Modal
       animationType="slide"
@@ -18,24 +39,38 @@ export const TodoEditModal: FC<TodoEditModalProps> = ({ todo, onClose }) => {
     >
       <View className="flex-row p-4 border-b-2 justify-between items-center">
         <Text className="text-3xl">Edit ToDo</Text>
-        <Text className="text-4xl transform roatate-45" onPress={onClose}>
-          +
-        </Text>
+        <TouchableOpacity className="p-2 rounded-full" onPress={onClose}>
+          <Text className="text-4xl rotate-45">+</Text>
+        </TouchableOpacity>
       </View>
       <View className="flex-1 p-4 gap-2">
         <View className="gap-1">
           <Label>Title</Label>
-          <TextInput placeholder="Title" />
+          <TextInput placeholder="Title" control={control} name="title" />
         </View>
         <View className="gap-1">
           <Label>Description</Label>
-          <TextInput placeholder="Description" multiline className="h-28" />
+          <TextInput
+            placeholder="Description"
+            multiline
+            className="h-28"
+            control={control}
+            name="content"
+          />
         </View>
         <View className="py-2">
           {todo?.completed ? (
-            <Button title="Mark Incomplete" alt />
+            <Button
+              title="Mark Incomplete"
+              onPress={() => changeTodoStatus(false)}
+              alt
+            />
           ) : (
-            <Button title="Mark Completed" alt />
+            <Button
+              title="Mark Completed"
+              onPress={() => changeTodoStatus(true)}
+              alt
+            />
           )}
         </View>
       </View>
@@ -46,7 +81,7 @@ export const TodoEditModal: FC<TodoEditModalProps> = ({ todo, onClose }) => {
           titleClassName="text-white"
           alt
         />
-        <Button title="Save" />
+        <Button title="Save" onPress={handleSubmit(onSubmit)} />
       </View>
     </Modal>
   );
