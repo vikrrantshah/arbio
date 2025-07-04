@@ -71,7 +71,6 @@ export const useAuthStore = create<AuthStore>((set) => ({
 }));
 
 const parseJWT = (token: string): Omit<User, 'password'> => {
-  console.log('TOken', token);
   const base64Url = token.split('.')[1];
   const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
   const jsonPayload = decodeURIComponent(

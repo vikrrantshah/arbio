@@ -5,6 +5,7 @@ import { FC } from 'react';
 import { Modal, Text, TouchableOpacity, View } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTodosStore } from '@arbio/store';
 
 type TodoEditModalProps = {
   todo: ToDo | null;
@@ -12,17 +13,24 @@ type TodoEditModalProps = {
 };
 
 export const TodoEditModal: FC<TodoEditModalProps> = ({ todo, onClose }) => {
-  const { control, handleSubmit, setValue } = useForm<UpdateTodoForm>({
+  const { updateTodo, error } = useTodosStore();
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<UpdateTodoForm>({
     resolver: zodResolver(UpdateTodoSchema),
     defaultValues: {
       title: todo?.title || '',
       content: todo?.content || '',
       completed: todo?.completed || false,
+      userId: todo?.userId,
     },
   });
 
   const onSubmit = (data: UpdateTodoForm) => {
-    console.log(data);
+    updateTodo({ ...data, id: todo!.id }, onClose);
   };
 
   const changeTodoStatus = (completed: boolean) => {

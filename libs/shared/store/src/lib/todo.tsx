@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { ToDo, User } from '@prisma/client';
+import { ToDo } from '@prisma/client';
 import axios from 'axios';
 import { useAuthStore } from './auth';
 
@@ -42,36 +42,36 @@ type TodoStore = {
   todos: ToDo[];
   isLoading: boolean;
   error: any;
-  getTodos: (userId: User['id']) => void;
-  createTodo: (todo: Omit<ToDo, 'id'>) => void;
-  updateTodo: (todo: ToDo) => void;
-  deleteTodo: (todoId: ToDo['id']) => void;
+  getTodos: () => void;
+  createTodo: (
+    todo: Omit<ToDo, 'id' | 'completed'>,
+    onSuccess: () => void,
+  ) => void;
+  updateTodo: (todo: ToDo, onSuccess: () => void) => void;
+  deleteTodo: (todoId: ToDo['id'], onSuccess: () => void) => void;
 };
 
-export const useTodos = create<TodoStore>((set, get) => ({
+export const useTodosStore = create<TodoStore>((set, get) => ({
   todos: [],
   isLoading: false,
   error: null,
-  getTodos: (userId) => {
+  getTodos: () => {
+    const userId = useAuthStore.getState().user?.id;
     set({ isLoading: true });
-    axios
-      .get<ToDo[]>(`/todo/${userId}`)
+    axiosInstance
+      .get<ToDo[]>(`/todo/user/${userId}`)
       .then(({ data }) => {
         set({
           todos: data.sort((a) => (a.completed ? 1 : -1)),
           isLoading: false,
         });
       })
-      .catch((error) => {
-        set({
-          error,
-          isLoading: false,
-        });
-      });
+      .catch((error) => set({ error, isLoading: false }));
   },
-  createTodo: (todo) => {
-    axios
-      .post<ToDo>('/todo', todo)
+  createTodo: (todo, onSuccess) => {
+    set({ isLoading: true });
+    axiosInstance
+      .post<ToDo>('/todo', { ...todo, completed: false })
       .then(({ data }) => {
         const { todos } = get();
         todos.push(data);
@@ -79,47 +79,38 @@ export const useTodos = create<TodoStore>((set, get) => ({
           todos: todos.sort((a) => (a.completed ? 1 : -1)),
           isLoading: false,
         });
+        onSuccess();
       })
-      .catch((error) => {
-        set({
-          error,
-          isLoading: false,
-        });
-      });
+      .catch((error) => set({ error, isLoading: false }));
   },
-  updateTodo: (todo) => {
+  updateTodo: (todo, onSuccess) => {
     const { id, ...restTodo } = todo;
-    axios
-      .post<ToDo>(`/todo/${id}`, restTodo)
+    set({ isLoading: true });
+    axiosInstance
+      .patch<ToDo>(`/todo/${id}`, restTodo)
       .then(({ data }) => {
+        console.log('updateTodo', data);
         const todos = get().todos.map((t) => {
           if (t.id !== data.id) return t;
           return data;
         });
-
         set({
           todos: todos.sort((a) => (a.completed ? 1 : -1)),
           isLoading: false,
         });
+        onSuccess();
       })
-      .catch((error) => {
-        set({
-          error,
-          isLoading: false,
-        });
-      });
+      .catch((error) => set({ error, isLoading: false }));
   },
-  deleteTodo: (todoId) => {
-    axios
+  deleteTodo: (todoId, onSuccess) => {
+    set({ isLoading: true });
+    axiosInstance
       .post<ToDo>(`/todo/:${todoId}`)
       .then(({ data }) => {
+        console.log('deleteTodo', data);
         set({ todos: get().todos.filter((t) => t.id === data.id) });
+        onSuccess();
       })
-      .catch((error) => {
-        set({
-          error,
-          isLoading: false,
-        });
-      });
+      .catch((error) => set({ error, isLoading: false }));
   },
 }));

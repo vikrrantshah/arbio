@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   FlatList,
   SafeAreaView,
   StatusBar,
@@ -8,45 +9,21 @@ import {
 } from 'react-native';
 import { SvgUri } from 'react-native-svg';
 import { ToDo } from '@prisma/client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TodoItem } from '../../components/todo-item';
 import { TodoEditModal } from '../../components/todo-edit-modal';
 import { TodoCreateModal } from '../../components/todo-create-modal';
-
-const todos: ToDo[] = [
-  {
-    id: 1,
-    title: '1 Lorem Ipsum',
-    content: '1 hello for the other side.',
-    completed: false,
-    userId: 0,
-  },
-  {
-    id: 2,
-    title: '2 Lorem Ipsum',
-    content: '2 hello for the other side.',
-    completed: true,
-    userId: 0,
-  },
-  {
-    id: 3,
-    title: '3 Lorem Ipsum',
-    content: '3 hello for the other side.',
-    completed: false,
-    userId: 0,
-  },
-  {
-    id: 4,
-    title: '4 Lorem Ipsum',
-    content: '4 hello for the other side.',
-    completed: true,
-    userId: 0,
-  },
-];
+import { useTodosStore } from '@arbio/store';
 
 const Home = () => {
   const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
   const [todoToEdit, setTodoToEdit] = useState<ToDo | null>(null);
+
+  const { isLoading, todos, error, getTodos } = useTodosStore();
+
+  useEffect(() => {
+    getTodos();
+  }, []);
 
   return (
     <>
@@ -66,18 +43,40 @@ const Home = () => {
         </View>
         <View className="flex-1 p-4 bg-neutral-100 gap-4">
           <Text className="text-3xl font-semibold">Your ToDos</Text>
-          <FlatList
-            data={todos}
-            keyExtractor={(todo) => `${todo.id}`}
-            renderItem={({ item: todo }) => (
-              <TodoItem
-                todo={todo}
-                key={todo.id}
-                onEditTodoPress={setTodoToEdit}
-              />
-            )}
-            contentContainerClassName="gap-2"
-          />
+          {isLoading ? (
+            <ActivityIndicator size="large" />
+          ) : (
+            <FlatList
+              refreshing={isLoading}
+              onRefresh={getTodos}
+              ListEmptyComponent={
+                <View className="flex-1">
+                  {!error ? (
+                    <>
+                      <Text className="text-gray-700">You have no todos.</Text>
+                      <Text className="text-gray-700">
+                        Tap on the plus above to add one.
+                      </Text>
+                    </>
+                  ) : (
+                    <Text className="text-red-500">
+                      Something went wrong please try again later.
+                    </Text>
+                  )}
+                </View>
+              }
+              data={todos}
+              keyExtractor={(todo) => `${todo.id}`}
+              renderItem={({ item: todo }) => (
+                <TodoItem
+                  todo={todo}
+                  key={todo.id}
+                  onEditTodoPress={setTodoToEdit}
+                />
+              )}
+              contentContainerClassName="gap-2"
+            />
+          )}
         </View>
         {createModalVisible && (
           <TodoCreateModal onClose={() => setCreateModalVisible(false)} />
