@@ -2,7 +2,7 @@ import { UpdateTodoForm, UpdateTodoSchema } from '@arbio/schema';
 import { Button, Label, TextInput } from '@arbio/ui';
 import { ToDo } from '@prisma/client';
 import { FC } from 'react';
-import { Modal, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Modal, Text, TouchableOpacity, View } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTodosStore } from '@arbio/store';
@@ -13,13 +13,8 @@ type TodoEditModalProps = {
 };
 
 export const TodoEditModal: FC<TodoEditModalProps> = ({ todo, onClose }) => {
-  const { updateTodo, error } = useTodosStore();
-  const {
-    control,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm<UpdateTodoForm>({
+  const { updateTodo, deleteTodo, error } = useTodosStore();
+  const { control, handleSubmit, setValue } = useForm<UpdateTodoForm>({
     resolver: zodResolver(UpdateTodoSchema),
     defaultValues: {
       title: todo?.title || '',
@@ -37,6 +32,15 @@ export const TodoEditModal: FC<TodoEditModalProps> = ({ todo, onClose }) => {
     setValue('completed', completed);
     handleSubmit(onSubmit)();
   };
+
+  const onDeletePress = () => {
+    Alert.alert('Are you sure?', 'Once you delete this todo.', [
+      { text: 'Yes', onPress: () => deleteTodo(todo!.id, onClose) },
+      { text: 'Cancel' },
+    ]);
+  };
+
+  console.log(error);
 
   return (
     <Modal
@@ -88,6 +92,7 @@ export const TodoEditModal: FC<TodoEditModalProps> = ({ todo, onClose }) => {
           className="bg-red-500"
           titleClassName="text-white"
           alt
+          onPress={onDeletePress}
         />
         <Button title="Save" onPress={handleSubmit(onSubmit)} />
       </View>

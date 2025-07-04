@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { User } from '@prisma/client';
 import axios from 'axios';
+import { useTodosStore } from './todo';
 
 type AuthStore = {
   isAuthenticated: boolean;
@@ -39,6 +40,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
           user,
           error: null,
         });
+        useTodosStore.getState().getTodos();
       })
       .catch((error) => {
         JSON.stringify(error, null, 2);

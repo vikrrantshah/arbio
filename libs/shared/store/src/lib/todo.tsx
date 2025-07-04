@@ -89,7 +89,6 @@ export const useTodosStore = create<TodoStore>((set, get) => ({
     axiosInstance
       .patch<ToDo>(`/todo/${id}`, restTodo)
       .then(({ data }) => {
-        console.log('updateTodo', data);
         const todos = get().todos.map((t) => {
           if (t.id !== data.id) return t;
           return data;
@@ -105,10 +104,12 @@ export const useTodosStore = create<TodoStore>((set, get) => ({
   deleteTodo: (todoId, onSuccess) => {
     set({ isLoading: true });
     axiosInstance
-      .post<ToDo>(`/todo/:${todoId}`)
+      .delete<ToDo>(`/todo/${todoId}`)
       .then(({ data }) => {
-        console.log('deleteTodo', data);
-        set({ todos: get().todos.filter((t) => t.id === data.id) });
+        set({
+          todos: get().todos.filter((t) => t.id !== data.id),
+          isLoading: false,
+        });
         onSuccess();
       })
       .catch((error) => set({ error, isLoading: false }));
