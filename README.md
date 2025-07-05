@@ -1,82 +1,79 @@
-# Arbio
+# Arbio TODO
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+## Index
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
+1. Development
+2. Reasoning
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/nest?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+## Development
 
-## Finish your remote caching setup
+### Setup
 
-[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/eI27CjaFcL)
+Before you start make sure you have the following installed on your machine
 
+1. Docker
+2. NodeJS 22.17.0 or later
+3. Either XCode or Android Studio for emulating the Expo app. (Optional if you are using Expo Go on your device)
 
-## Run tasks
+To run this project for local development start with cloning this repo.
 
-To run the dev server for your app, use:
-
-```sh
-npx nx serve auth
+```shell
+git clone https://github.com/vikrrantshah/arbio.git
+cd arbio
 ```
 
-To create a production bundle:
+Because this project is a `Nx Monorepo` running following will install the node_modules for all the apps
 
-```sh
-npx nx build auth
+```shell
+npm install
 ```
 
-To see all available targets to run for a project, run:
+We can make use of the `Nx CLI` for running different scripts in the project.
 
-```sh
-npx nx show project auth
+You can do this by running
+
+```shell
+npx nx <your_command>
 ```
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+Or you can install Nx globally with a package manager of you choice. [(here)](https://nx.dev/getting-started/installation)
+If you'd like to continue with `NPM` run
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Add new projects
-
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
-
-Use the plugin's generator to create new projects.
-
-To generate a new application, use:
-
-```sh
-npx nx g @nx/nest:app demo
+```shell
+npm add --global nx
 ```
 
-To generate a new library, use:
+As you can see int the root folder there is the `docker-compose-dev.yml` file for the containers used in the project.
+To start the docker containers run
 
-```sh
-npx nx g @nx/node:lib mylib
+```shell
+docker compose -f docker-compose-dev.yml up -d
 ```
 
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
+Run the following commands to setup the `Prisma` library and your database schema.
 
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+```shell
+nx run db:generate-types && nx run db:migrate
+// or `npx nx run db:generate-types && npx nx run db:migrate`
+```
 
+### Running projects
 
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+The easiest way to start development servers for all the apps is to run
 
-## Install Nx Console
+```shell
+nx run-many -t serve
+```
 
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
+This command will run the `serve` script in all the projects (where configured) in this case `auth`, `backend` and `todos-mobile` apps in parallel using the `Nx TUI`. [(Read more on Nx TUI)](https://nx.dev/blog/nx-21-terminal-ui)
 
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+> Note this command will start the Expo apps for web target which this project is not currently configured for, so you can close the browser app.
 
-## Useful links
+If you don't want to start the dev server for all the app or wish to run some script for an app you can do so by running
 
-Learn more:
+```
+nx <script_target> <app_target> <options>
+// for example: `nx start todos-mobile -c`
+```
 
-- [Learn more about this workspace setup](https://nx.dev/nx-api/nest?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## Reasoning
