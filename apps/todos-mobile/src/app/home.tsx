@@ -13,27 +13,24 @@ import { useEffect, useState } from 'react';
 import { TodoItem } from '../../components/todo-item';
 import { TodoEditModal } from '../../components/todo-edit-modal';
 import { TodoCreateModal } from '../../components/todo-create-modal';
-import { useTodosStore } from '@arbio/store';
+import { useAuthStore, useTodosStore } from '@arbio/store';
 
 const Home = () => {
   const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
   const [todoToEdit, setTodoToEdit] = useState<ToDo | null>(null);
 
   const { isLoading, todos, error, getTodos } = useTodosStore();
+  const { logout } = useAuthStore();
 
   useEffect(() => {
     getTodos();
-    // if (!isAuthenticated)
-    //   setTimeout(() => {
-    //     router.replace('/');
-    //   }, 1);
   }, []);
 
   return (
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView className="flex-1 bg-white">
-        <View className="flex-row px-4 py-4 border-b-2 justify-between items-center">
+        <View className="flex-row px-4 py-2 border-b-2 justify-between items-center">
           <SvgUri
             uri={
               'https://cdn.prod.website-files.com/64fc2a65f3e576a13b130e5c/658489cd26e7a93fefb64436_3.svg'
@@ -41,9 +38,17 @@ const Home = () => {
             width={120}
             height={30}
           />
-          <TouchableOpacity onPress={() => setCreateModalVisible(true)}>
-            <Text className="text-4xl">+</Text>
-          </TouchableOpacity>
+          <View className="flex-row">
+            <TouchableOpacity
+              className="p-2 rounded-full"
+              onPress={() => setCreateModalVisible(true)}
+            >
+              <Text className="text-4xl">+</Text>
+            </TouchableOpacity>
+            <TouchableOpacity className="p-2 rounded-full" onPress={logout}>
+              <Text className="text-4xl">Logout</Text>
+            </TouchableOpacity>
+          </View>
         </View>
         <View className="flex-1 p-4 bg-neutral-100 gap-4">
           <Text className="text-3xl font-semibold">Your ToDos</Text>
