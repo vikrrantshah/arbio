@@ -3,11 +3,17 @@ import {
   SignUpFormDefaultValues,
   SignUpFormSchema,
 } from '@arbio/schema';
-import { Button, Label, Link, TextInput } from '@arbio/ui';
+import {
+  Button,
+  Label,
+  Link,
+  LogoHeader,
+  TextInput,
+  WebFormWrapper,
+} from '@arbio/ui';
 import { useRouter } from 'expo-router';
 import { useForm } from 'react-hook-form';
-import { SafeAreaView, StatusBar, Text, View } from 'react-native';
-import { SvgUri } from 'react-native-svg';
+import { Text, View } from 'react-native';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuthStore } from '@arbio/store';
 import { useEffect } from 'react';
@@ -28,18 +34,9 @@ const SignUp = () => {
 
   return (
     <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView className="flex-1 bg-white">
-        <View className="px-4 pb-4 border-b-2">
-          <SvgUri
-            uri={
-              'https://cdn.prod.website-files.com/64fc2a65f3e576a13b130e5c/658489cd26e7a93fefb64436_3.svg'
-            }
-            width={160}
-            height={40}
-          />
-        </View>
-        <View className="flex-1 p-4 bg-neutral-100">
+      <LogoHeader />
+      <WebFormWrapper>
+        <View className="flex-1 p-4">
           <View className="flex-1 justify-center">
             <Text className="text-4xl font-semibold">Create your account</Text>
             <Text className="text-gray-600">
@@ -101,14 +98,13 @@ const SignUp = () => {
               <Text>Already have an account? </Text>
               <Link
                 title="Log in"
-                onPress={() => router.replace('/auth/loginkr')}
+                onPress={() => router.replace('/auth/login')}
                 disabled={isLoading}
               />
             </View>
           </View>
         </View>
-        <View className="absolute bottom-0 inset-x-0 bg-neutral-100 h-10" />
-      </SafeAreaView>
+      </WebFormWrapper>
     </>
   );
 };

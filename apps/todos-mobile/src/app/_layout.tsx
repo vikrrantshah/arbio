@@ -1,7 +1,9 @@
+import { SafeAreaFiller } from '@arbio/ui';
 import '../../global.css';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
+import { SafeAreaView, StatusBar } from 'react-native';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -10,5 +12,13 @@ export default function RootLayout() {
     SplashScreen.hideAsync();
   }, []);
 
-  return <Stack screenOptions={{ headerShown: false }} />;
+  return (
+    <>
+      <StatusBar barStyle="dark-content" />
+      <SafeAreaView className="flex-1">
+        <Stack screenOptions={{ headerShown: false }} />
+        <SafeAreaFiller />
+      </SafeAreaView>
+    </>
+  );
 }

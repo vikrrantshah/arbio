@@ -35,7 +35,7 @@ export function TextInput<T extends FieldValues = FieldValues>({
         )}
       >
         <RNTextInput
-          className={cn('text-xl', className)}
+          className={cn('text-xl focus:outile-0', className)}
           value={field.value}
           onChangeText={field.onChange}
           {...props}

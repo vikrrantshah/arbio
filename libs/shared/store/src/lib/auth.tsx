@@ -30,6 +30,12 @@ export const useAuthStore = create<AuthStore>((set) => ({
       .post<{ access_token: string }>(
         'http://localhost:4001/auth/login',
         credentials,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+        },
       )
       .then(({ data: { access_token } }) => {
         const user = parseJWT(access_token);

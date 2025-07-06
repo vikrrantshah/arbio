@@ -25,7 +25,7 @@ const Home = () => {
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView className="flex-1 bg-white">
-        <View className="flex-row px-4 pb-4 border-b-2 justify-between items-center">
+        <View className="flex-row px-4 py-4 border-b-2 justify-between items-center">
           <SvgUri
             uri={
               'https://cdn.prod.website-files.com/64fc2a65f3e576a13b130e5c/658489cd26e7a93fefb64436_3.svg'
