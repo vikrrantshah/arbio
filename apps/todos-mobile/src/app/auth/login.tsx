@@ -17,6 +17,7 @@ import {
 } from '@arbio/schema';
 import { useAuthStore } from '@arbio/store';
 import { zodResolver } from '@hookform/resolvers/zod';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 export const Login = () => {
   const router = useRouter();
@@ -75,6 +76,7 @@ export const Login = () => {
               onPress={handleSubmit(login)}
               className="w-full"
               disabled={isLoading}
+              icon={<AntDesign name="login" size={24} color="black" />}
             />
             <View className="flex-row">
               <Text>Don't have an accout? </Text>

@@ -17,6 +17,7 @@ import { Text, View } from 'react-native';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuthStore } from '@arbio/store';
 import { useEffect } from 'react';
+import Feather from '@expo/vector-icons/Feather';
 
 const SignUp = () => {
   const router = useRouter();
@@ -93,6 +94,7 @@ const SignUp = () => {
               onPress={handleSubmit(register)}
               className="w-full"
               disabled={isLoading}
+              icon={<Feather name="user-plus" size={24} color="black" />}
             />
             <View className="flex-row">
               <Text>Already have an account? </Text>

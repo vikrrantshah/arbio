@@ -6,6 +6,7 @@ import { Alert, Modal, Text, TouchableOpacity, View } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTodosStore } from '@arbio/store';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 type TodoEditModalProps = {
   todo: ToDo | null;
@@ -54,7 +55,7 @@ export const TodoEditModal: FC<TodoEditModalProps> = ({ todo, onClose }) => {
         <View className="flex-row p-4 border-b-2 justify-between items-center">
           <Text className="text-3xl">Edit ToDo</Text>
           <TouchableOpacity className="p-2 rounded-full" onPress={onClose}>
-            <Text className="text-4xl rotate-45">+</Text>
+            <AntDesign name="closecircleo" size={24} color="black" />
           </TouchableOpacity>
         </View>
         <View className="flex-1 p-4 gap-2">

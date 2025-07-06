@@ -5,10 +5,23 @@ import {
 } from '@arbio/schema';
 import { Button, isWeb, Label, TextInput, WebModalWrapper } from '@arbio/ui';
 import { FC } from 'react';
-import { Modal, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Modal,
+  ModalProps,
+  Platform,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuthStore, useTodosStore } from '@arbio/store';
+import AntDesign from '@expo/vector-icons/AntDesign';
+
+const animationType: ModalProps['animationType'] = Platform.select({
+  default: 'slide',
+  web: 'fade',
+});
 
 type TodoCreateModalProps = {
   onClose: () => void;
@@ -30,7 +43,7 @@ export const TodoCreateModal: FC<TodoCreateModalProps> = ({ onClose }) => {
   return (
     <Modal
       visible={true}
-      animationType="fade"
+      animationType={animationType}
       presentationStyle="formSheet"
       onRequestClose={onClose}
       transparent={isWeb}
@@ -39,7 +52,7 @@ export const TodoCreateModal: FC<TodoCreateModalProps> = ({ onClose }) => {
         <View className="flex-row p-4 border-b-2 justify-between items-center">
           <Text className="text-3xl">Create ToDo</Text>
           <TouchableOpacity className="p-2 rounded-full" onPress={onClose}>
-            <Text className="text-4xl rotate-45">+</Text>
+            <AntDesign name="closecircleo" size={24} color="black" />
           </TouchableOpacity>
         </View>
         <View className="flex-1 p-4">

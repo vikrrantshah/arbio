@@ -3,6 +3,8 @@ import { Dimensions, Text, View } from 'react-native';
 import { SvgUri } from 'react-native-svg';
 import { Button, WebFormWrapper } from '@arbio/ui';
 import { useRouter } from 'expo-router';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import Feather from '@expo/vector-icons/Feather';
 
 const width = Dimensions.get('window').width;
 
@@ -22,11 +24,16 @@ export const App = () => {
         <Text className="text-3xl">Find Your Arbio Home</Text>
       </View>
       <View className="p-4 gap-2 bg-white">
-        <Button onPress={() => router.replace('/auth/login')} title="Login" />
+        <Button
+          onPress={() => router.replace('/auth/login')}
+          title="Login"
+          icon={<AntDesign name="login" size={24} color="black" />}
+        />
         <Button
           onPress={() => router.replace('/auth/signup')}
           title="Sign Up"
           alt
+          icon={<Feather name="user-plus" size={24} color="black" />}
         />
       </View>
     </WebFormWrapper>

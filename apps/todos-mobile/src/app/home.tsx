@@ -14,6 +14,8 @@ import { TodoItem } from '../../components/todo-item';
 import { TodoEditModal } from '../../components/todo-edit-modal';
 import { TodoCreateModal } from '../../components/todo-create-modal';
 import { useAuthStore, useTodosStore } from '@arbio/store';
+import { Button } from '@arbio/ui';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 const Home = () => {
   const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
@@ -39,19 +41,20 @@ const Home = () => {
             height={30}
           />
           <View className="flex-row">
-            <TouchableOpacity
-              className="p-2 rounded-full"
-              onPress={() => setCreateModalVisible(true)}
-            >
-              <Text className="text-4xl">+</Text>
-            </TouchableOpacity>
             <TouchableOpacity className="p-2 rounded-full" onPress={logout}>
-              <Text className="text-4xl">Logout</Text>
+              <AntDesign name="logout" size={24} color="black" />
             </TouchableOpacity>
           </View>
         </View>
         <View className="flex-1 p-4 bg-neutral-100 gap-4">
-          <Text className="text-3xl font-semibold">Your ToDos</Text>
+          <View className="flex-row justify-between items-center">
+            <Text className="text-4xl font-semibold">Your ToDos</Text>
+            <Button
+              title="New"
+              icon={<AntDesign name="pluscircleo" size={24} color="black" />}
+              onPress={() => setCreateModalVisible(true)}
+            />
+          </View>
           {isLoading ? (
             <ActivityIndicator size="large" />
           ) : (
