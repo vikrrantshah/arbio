@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { SvgUri } from 'react-native-svg';
 import { ToDo } from '@prisma/client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TodoItem } from '../../components/todo-item';
 import { TodoEditModal } from '../../components/todo-edit-modal';
 import { TodoCreateModal } from '../../components/todo-create-modal';
@@ -20,6 +20,14 @@ const Home = () => {
   const [todoToEdit, setTodoToEdit] = useState<ToDo | null>(null);
 
   const { isLoading, todos, error, getTodos } = useTodosStore();
+
+  useEffect(() => {
+    getTodos();
+    // if (!isAuthenticated)
+    //   setTimeout(() => {
+    //     router.replace('/');
+    //   }, 1);
+  }, []);
 
   return (
     <>

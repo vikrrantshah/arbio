@@ -32,7 +32,14 @@ export const useAuthStore = create<AuthStore>((set) => ({
     AsyncStorage.getItem(ARBIO_AUTH_TOKEN)
       .then((token) => {
         if (!token) return;
-        set({ isLoading: false, access_token: token, isAuthenticated: true });
+        const user = parseJWT(token);
+
+        set({
+          isLoading: false,
+          access_token: token,
+          isAuthenticated: true,
+          user,
+        });
       })
       .finally(() => {
         set({ isLoading: false });
