@@ -28,7 +28,7 @@ Because this project is a `Nx Monorepo` running following will install the node_
 npm install
 ```
 
-We can make use of the `Nx CLI` for running different scripts in the project.
+We can make use of the `Nx CLI` for running different scripts in the project without cd-ing into each app.
 
 You can do this by running
 
@@ -77,3 +77,18 @@ nx <script_target> <app_target> <options>
 ```
 
 ## Reasoning
+
+This section will discuss the reasoning behind the technologies, frameworks and libraries used in this project.
+
+| No. | Technology/Framework/Library | Description                                     |
+| --- | ---------------------------- | ----------------------------------------------- |
+| 1   | Nx                           | Monorepo Orchestrator                           |
+| 2   | NestJS                       | Backend framework                               |
+| 3   | Prisma                       | Database ORM                                    |
+| 4   | PassportJS                   | Library for implementing auth stratagies        |
+| 5   | React Native                 | Cross Platform App Development Framework        |
+| 6   | Expo                         | React Native Meta Framework for better DX       |
+| 7   | Zod                          | Schema and type validation                      |
+| 8   | Zustand                      | State Machine                                   |
+| 9   | Tailwind CSS                 | CSS Utitlty Framework                           |
+| 10  | Nativewind                   | Library to make Tailwind work with React Native |
