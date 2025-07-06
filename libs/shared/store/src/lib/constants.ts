@@ -1,0 +1,1 @@
+export const ARBIO_AUTH_TOKEN = 'ARBIO_AUTH_TOKEN';

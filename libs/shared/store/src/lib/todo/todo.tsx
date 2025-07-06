@@ -1,42 +1,7 @@
 import { create } from 'zustand';
 import { ToDo } from '@prisma/client';
-import axios from 'axios';
-import { useAuthStore } from './auth';
-
-const axiosInstance = axios.create({
-  baseURL: 'http://localhost:4000/api', // Replace with your actual API base URL
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
-axiosInstance.interceptors.request.use(
-  (config) => {
-    const token = useAuthStore.getState().access_token; // Get the token directly from the store state
-
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  },
-);
-
-axiosInstance.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  (error) => {
-    // Example: If token expires or is invalid, clear it from the store
-    if (error.response && error.response.status === 401) {
-      useAuthStore.getState().logout();
-      // You might also want to redirect to a login page here
-    }
-    return Promise.reject(error);
-  },
-);
+import { useAuthStore } from '../auth/auth';
+import { apiClient } from './api-client';
 
 type TodoStore = {
   todos: ToDo[];
@@ -58,11 +23,13 @@ export const useTodosStore = create<TodoStore>((set, get) => ({
   getTodos: () => {
     const userId = useAuthStore.getState().user?.id;
     set({ isLoading: true });
-    axiosInstance
+    apiClient
       .get<ToDo[]>(`/todo/user/${userId}`)
       .then(({ data }) => {
         set({
-          todos: data.sort((a) => (a.completed ? 1 : -1)),
+          todos: data
+            .sort((a, b) => a.id - b.id)
+            .sort((a) => (a.completed ? 1 : -1)),
           isLoading: false,
         });
       })
@@ -70,7 +37,7 @@ export const useTodosStore = create<TodoStore>((set, get) => ({
   },
   createTodo: (todo, onSuccess) => {
     set({ isLoading: true });
-    axiosInstance
+    apiClient
       .post<ToDo>('/todo', { ...todo, completed: false })
       .then(({ data }) => {
         const { todos } = get();
@@ -86,7 +53,7 @@ export const useTodosStore = create<TodoStore>((set, get) => ({
   updateTodo: (todo, onSuccess) => {
     const { id, ...restTodo } = todo;
     set({ isLoading: true });
-    axiosInstance
+    apiClient
       .patch<ToDo>(`/todo/${id}`, restTodo)
       .then(({ data }) => {
         const todos = get().todos.map((t) => {
@@ -103,7 +70,7 @@ export const useTodosStore = create<TodoStore>((set, get) => ({
   },
   deleteTodo: (todoId, onSuccess) => {
     set({ isLoading: true });
-    axiosInstance
+    apiClient
       .delete<ToDo>(`/todo/${todoId}`)
       .then(({ data }) => {
         set({

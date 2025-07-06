@@ -1,7 +1,9 @@
 import { create } from 'zustand';
 import { User } from '@prisma/client';
-import axios from 'axios';
-import { useTodosStore } from './todo';
+import { apiClient } from './api-client';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SplashScreen from 'expo-splash-screen';
+import { ARBIO_AUTH_TOKEN } from '../constants';
 
 type AuthStore = {
   isAuthenticated: boolean;
@@ -9,6 +11,7 @@ type AuthStore = {
   access_token: string | null;
   user: Omit<User, 'password'> | null;
   error: any;
+  localLogin: () => void;
   login: (credentials: { email: string; password: string }) => void;
   register: (credentials: {
     email: string;
@@ -24,19 +27,21 @@ export const useAuthStore = create<AuthStore>((set) => ({
   access_token: null,
   user: null,
   error: null,
+  localLogin: () => {
+    set({ isLoading: true });
+    AsyncStorage.getItem(ARBIO_AUTH_TOKEN)
+      .then((token) => {
+        if (!token) return;
+        set({ isLoading: false, access_token: token, isAuthenticated: true });
+      })
+      .finally(() => {
+        set({ isLoading: false });
+      });
+  },
   login: (credentials) => {
     set({ isLoading: true });
-    axios
-      .post<{ access_token: string }>(
-        'http://localhost:4001/auth/login',
-        credentials,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-          },
-        },
-      )
+    apiClient
+      .post<{ access_token: string }>('/login', credentials)
       .then(({ data: { access_token } }) => {
         const user = parseJWT(access_token);
         set({
@@ -46,7 +51,8 @@ export const useAuthStore = create<AuthStore>((set) => ({
           user,
           error: null,
         });
-        useTodosStore.getState().getTodos();
+
+        AsyncStorage.setItem(ARBIO_AUTH_TOKEN, access_token);
       })
       .catch((error) => {
         JSON.stringify(error, null, 2);
@@ -55,11 +61,8 @@ export const useAuthStore = create<AuthStore>((set) => ({
   },
   register: (credentials) => {
     set({ isLoading: false });
-    axios
-      .post<{ access_token: string }>(
-        'http://localhost:4001/auth/register',
-        credentials,
-      )
+    apiClient
+      .post<{ access_token: string }>('/register', credentials)
       .then(({ data: { access_token } }) => {
         const user = parseJWT(access_token);
         console.log(user);
@@ -70,12 +73,18 @@ export const useAuthStore = create<AuthStore>((set) => ({
           user,
           error: null,
         });
+
+        AsyncStorage.setItem(ARBIO_AUTH_TOKEN, access_token);
       })
       .catch((error) => {
         set({ isLoading: false, error });
       });
   },
-  logout: () => set({ access_token: null, isAuthenticated: false }),
+  logout: () => {
+    set({ access_token: null, isAuthenticated: false });
+
+    AsyncStorage.removeItem(ARBIO_AUTH_TOKEN);
+  },
 }));
 
 const parseJWT = (token: string): Omit<User, 'password'> => {
