@@ -36,7 +36,7 @@ You can do this by running
 npx nx <your_command>
 ```
 
-Or you can install Nx globally with a package manager of you choice. [(here)](https://nx.dev/getting-started/installation)
+Or you can install Nx globally with a package manager of you choice [(here)](https://nx.dev/getting-started/installation).
 If you'd like to continue with `NPM` run
 
 ```shell
@@ -94,13 +94,25 @@ This section will discuss the reasoning behind the technologies, frameworks and 
 
 ### 1. Nx Monorepo
 
+Pros
+
 - Nx is a Typescript-first Monorepo tool.
 - Compared to other monorepo tools like npm, yarn or pnpm workspaces Nx is an overall monorepo orchestrator.
 - Nx has a CLI for creating framework specific apps and libraries.
 - Nx CLI is also very intuitive (similar to package.json) to setup custom scripts for an app or lib with project.json
 - Nx has a TUI that can be used for running multiple dev server or scripts in parallel (So you don't need to deal will multiple terminals)
+- Nx cloud you can maintain your pipelines and deploments.
+- Nx has built-in build caching.
+
+Cons
+
+- Nx has a bit of learning curve.
+- With Nx you need at least one team member who understands Nx or is fluent with it.
+- Initial setup can be a bit time consuming.
 
 ### 2. NestJS
+
+Pros
 
 - NestJS is a Typescript-first backend framework.
 - Since it's Typescript we gain the benefits of e2e type safety, single language productivity and code sharing.
@@ -108,14 +120,26 @@ This section will discuss the reasoning behind the technologies, frameworks and 
 - Because NestJS is an opinionated (or batteries-included) framework patterns like Middlewares, Pipes, Guards, Interceptors and more are built in the framework itself.
 - NestJS also has a good set of first party recipies from OpenAPI docs to ORMs and more to go with the framework.
 
+Cons
+
+- You will have to think on your feet for some library integrations since most of the Typescript ecosystem follows procedural programming.
+
 ### 3. Prisma
+
+Pros
 
 - Is this most popular ORM in the Typescript ecosystem.
 - Prisma's DSL is easy to understand and represents the schema in a SQL like structure.
 - Prisma comes with the Prisma CLI that takes care or migrations, type generation and a explorer tool.
-- NestJS has a first-party recipi for Prisma
+- NestJS has a first-party recipi for Prisma.
+
+Cons
+
+- Renaming columns is not possible and you will have to handle that mannually.
 
 ### 4. PassportJS
+
+Pros
 
 - PassportJS is an easy to use middleware utility for implementing auth stratagies.
 - NestJS has a first-party recipi for PassportJS (email-password and JWT).
@@ -123,9 +147,15 @@ This section will discuss the reasoning behind the technologies, frameworks and 
 
 ### 5. React Native
 
+Pros
+
 - React Native is the second most popular cross platform framework for mobile devices.
 - React Native uses React (the most popular declarative web library) as it's way of declarative UI which makes it easier for Web developers to translate their skills and easy for hiring new engineers.
 - React Native with Typescript gives the benefits of e2e type safety, single language productivity and code sharing.
+
+Cons
+
+- Flutter is a more popular option.
 
 ### 6. Expo
 
@@ -135,12 +165,24 @@ This section will discuss the reasoning behind the technologies, frameworks and 
 - Expo provides OTA (Over the Air) Updates for non-native code i.e. No need to publish an app update the App UI will be updated by itself.
 - Expo also has great support for React Native for Web.
 
+Cons
+
+- With Native Modules some of Expo's feature may not work in the best form or some times can cause unexpected issues.
+
 ### 7. Zod
+
+Pros
 
 - Zod is the most popular schema validation library in Typescript ecosystem.
 - Zod is a Typescript-first validation library and it's easy to extract types from Zod Schema.
 
+Cons
+
+- Can be performance expensive.
+
 ### 8. Zustand
+
+Pros
 
 - Zustand is a minimal state management library for React.
 - It's easier to setup a Zustand store than to configure the React's Context API and other state management libraries like Redux.
@@ -149,6 +191,12 @@ This section will discuss the reasoning behind the technologies, frameworks and 
 
 ### 9. Tailwind CSS
 
+Pros
+
 - Unlike other UI libraries Tailwind provides a set of utility classes do develop your own design system.
 - It's also very easy to customise to accommodate custom colors and animation
 - With NativeWind we can use Tailwind with React Native
+
+Cons
+
+- Can be cumbersome to setup.
