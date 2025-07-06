@@ -5,6 +5,7 @@ export * from './lib/link';
 export * from './lib/safe-area-filler';
 export * from './lib/web-form-wrapper';
 export * from './lib/logo-header';
+export * from './lib/web-modal-wrapper';
 
 export * from './utils/cn';
 export * from './utils/platform';

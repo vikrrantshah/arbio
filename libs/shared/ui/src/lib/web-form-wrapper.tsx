@@ -10,8 +10,8 @@ export const WebFormWrapper: FC<WebFormWrapperProps> = ({ children }) => {
   if (isWeb)
     return (
       <>
-        <View className="flex-1 justify-center items-center hidden sm:flex">
-          <View className="bg-white rounded-lg border-2 p-8 max-w-xl min-h-[80%]">
+        <View className="flex-1 justify-center items-center hidden sm:flex w-full">
+          <View className="bg-white rounded-lg border-2 p-8 max-w-xl min-w-[60%] min-h-[80%]">
             {children}
           </View>
         </View>

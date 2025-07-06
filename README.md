@@ -67,7 +67,7 @@ nx run-many -t serve
 
 This command will run the `serve` script in all the projects (where configured) in this case `auth`, `backend` and `todos-mobile` apps in parallel using the `Nx TUI`. [(Read more on Nx TUI)](https://nx.dev/blog/nx-21-terminal-ui)
 
-> Note this command will start the Expo apps for web target which this project is not currently configured for, so you can close the browser app.
+> Note this command will start the Expo apps for web target which means it will open by default on browser. You go in the Nx TUI to interact with Expo dev server.
 
 If you don't want to start the dev server for all the app or wish to run some script for an app you can do so by running
 

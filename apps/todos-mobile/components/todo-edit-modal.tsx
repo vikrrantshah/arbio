@@ -1,5 +1,5 @@
 import { UpdateTodoForm, UpdateTodoSchema } from '@arbio/schema';
-import { Button, Label, TextInput } from '@arbio/ui';
+import { Button, isWeb, Label, TextInput, WebModalWrapper } from '@arbio/ui';
 import { ToDo } from '@prisma/client';
 import { FC } from 'react';
 import { Alert, Modal, Text, TouchableOpacity, View } from 'react-native';
@@ -44,58 +44,61 @@ export const TodoEditModal: FC<TodoEditModalProps> = ({ todo, onClose }) => {
 
   return (
     <Modal
-      animationType="slide"
       visible={!!todo}
+      animationType="fade"
       presentationStyle="formSheet"
       onRequestClose={onClose}
+      transparent={isWeb}
     >
-      <View className="flex-row p-4 border-b-2 justify-between items-center">
-        <Text className="text-3xl">Edit ToDo</Text>
-        <TouchableOpacity className="p-2 rounded-full" onPress={onClose}>
-          <Text className="text-4xl rotate-45">+</Text>
-        </TouchableOpacity>
-      </View>
-      <View className="flex-1 p-4 gap-2">
-        <View className="gap-1">
-          <Label>Title</Label>
-          <TextInput placeholder="Title" control={control} name="title" />
+      <WebModalWrapper>
+        <View className="flex-row p-4 border-b-2 justify-between items-center">
+          <Text className="text-3xl">Edit ToDo</Text>
+          <TouchableOpacity className="p-2 rounded-full" onPress={onClose}>
+            <Text className="text-4xl rotate-45">+</Text>
+          </TouchableOpacity>
         </View>
-        <View className="gap-1">
-          <Label>Description</Label>
-          <TextInput
-            placeholder="Description"
-            multiline
-            className="h-28"
-            control={control}
-            name="content"
+        <View className="flex-1 p-4 gap-2">
+          <View className="gap-1">
+            <Label>Title</Label>
+            <TextInput placeholder="Title" control={control} name="title" />
+          </View>
+          <View className="gap-1">
+            <Label>Description</Label>
+            <TextInput
+              placeholder="Description"
+              multiline
+              className="h-28"
+              control={control}
+              name="content"
+            />
+          </View>
+          <View className="py-2">
+            {todo?.completed ? (
+              <Button
+                title="Mark Incomplete"
+                onPress={() => changeTodoStatus(false)}
+                alt
+              />
+            ) : (
+              <Button
+                title="Mark Completed"
+                onPress={() => changeTodoStatus(true)}
+                alt
+              />
+            )}
+          </View>
+        </View>
+        <View className="px-4 pb-10 gap-2">
+          <Button
+            title="Delete"
+            className="bg-red-500"
+            titleClassName="text-white"
+            alt
+            onPress={onDeletePress}
           />
+          <Button title="Save" onPress={handleSubmit(onSubmit)} />
         </View>
-        <View className="py-2">
-          {todo?.completed ? (
-            <Button
-              title="Mark Incomplete"
-              onPress={() => changeTodoStatus(false)}
-              alt
-            />
-          ) : (
-            <Button
-              title="Mark Completed"
-              onPress={() => changeTodoStatus(true)}
-              alt
-            />
-          )}
-        </View>
-      </View>
-      <View className="px-4 pb-10 gap-2">
-        <Button
-          title="Delete"
-          className="bg-red-500"
-          titleClassName="text-white"
-          alt
-          onPress={onDeletePress}
-        />
-        <Button title="Save" onPress={handleSubmit(onSubmit)} />
-      </View>
+      </WebModalWrapper>
     </Modal>
   );
 };
