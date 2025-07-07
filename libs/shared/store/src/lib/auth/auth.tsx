@@ -2,15 +2,15 @@ import { create } from 'zustand';
 import { User } from '@prisma/client';
 import { apiClient } from './api-client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as SplashScreen from 'expo-splash-screen';
 import { ARBIO_AUTH_TOKEN } from '../constants';
+import { AxiosError } from 'axios';
 
 type AuthStore = {
   isAuthenticated: boolean;
   isLoading: boolean;
   access_token: string | null;
   user: Omit<User, 'password'> | null;
-  error: any;
+  error: AxiosError | null;
   localLogin: () => void;
   login: (credentials: { email: string; password: string }) => void;
   register: (credentials: {

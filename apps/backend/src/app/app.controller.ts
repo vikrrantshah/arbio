@@ -1,5 +1,4 @@
-import { JwtAuthGuard } from '@arbio/authenticator';
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 
 @Controller()
 export class AppController {}

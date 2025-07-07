@@ -9,7 +9,7 @@ import { useTodosStore } from '@arbio/store';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
 type TodoEditModalProps = {
-  todo: ToDo | null;
+  todo: ToDo;
   onClose: () => void;
 };
 
@@ -26,7 +26,7 @@ export const TodoEditModal: FC<TodoEditModalProps> = ({ todo, onClose }) => {
   });
 
   const onSubmit = (data: UpdateTodoForm) => {
-    updateTodo({ ...data, id: todo!.id }, onClose);
+    updateTodo({ ...data, id: todo.id }, onClose);
   };
 
   const changeTodoStatus = (completed: boolean) => {
@@ -36,7 +36,7 @@ export const TodoEditModal: FC<TodoEditModalProps> = ({ todo, onClose }) => {
 
   const onDeletePress = () => {
     Alert.alert('Are you sure?', 'Once you delete this todo.', [
-      { text: 'Yes', onPress: () => deleteTodo(todo!.id, onClose) },
+      { text: 'Yes', onPress: () => deleteTodo(todo.id, onClose) },
       { text: 'Cancel' },
     ]);
   };

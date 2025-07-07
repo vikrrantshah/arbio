@@ -2,11 +2,12 @@ import { create } from 'zustand';
 import { ToDo } from '@prisma/client';
 import { useAuthStore } from '../auth/auth';
 import { apiClient } from './api-client';
+import { AxiosError } from 'axios';
 
 type TodoStore = {
   todos: ToDo[];
   isLoading: boolean;
-  error: any;
+  error: AxiosError | null;
   getTodos: () => void;
   createTodo: (
     todo: Omit<ToDo, 'id' | 'completed'>,
