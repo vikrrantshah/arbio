@@ -1,0 +1,96 @@
+name: Lint and Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_call:
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          filter: tree:0
+          fetch-depth: 0
+
+      - name: Setup Node 22.17.0
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.17.0
+          cache: 'npm'
+
+      - name: Install Node Modules
+        run: npm ci --legacy-peer-deps
+
+      - name: Nx Cache Setup
+        uses: nrwl/nx-set-shas@v4
+
+      - name: Generate Prisma Client
+        run: npx nx run db:generate-types
+
+      - name: Lint all affected
+        run: npx nx affected -t lint
+  build-server:
+    name: Build Auth and Backend Server
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          filter: tree:0
+          fetch-depth: 0
+
+      - name: Setup Node 22.17.0
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.17.0
+          cache: 'npm'
+
+      - name: Install Node Modules
+        run: npm ci --legacy-peer-deps
+
+      - name: Nx Cache Setup
+        uses: nrwl/nx-set-shas@v4
+
+      - name: Generate Prisma Client
+        run: npx nx run db:generate-types
+
+      - name: Build all affected servers
+        run: npx nx affected -t build
+  build-web:
+    name: Build Expo Web App
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          filter: tree:0
+          fetch-depth: 0
+
+      - name: Setup Node 22.17.0
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.17.0
+          cache: 'npm'
+
+      - name: Install Node Modules
+        run: npm ci --legacy-peer-deps
+
+      - name: Nx Cache Setup
+        uses: nrwl/nx-set-shas@v4
+
+      - name: Generate Prisma Client
+        run: npx nx run db:generate-types
+
+      - name: Build all affected Expo web apps
+        run: npx nx affected -t export
